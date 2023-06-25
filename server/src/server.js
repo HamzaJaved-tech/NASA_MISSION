@@ -1,9 +1,16 @@
-const http = require('http');
-require("dotenv");
-const app = require('./app.js');
-const PORT =  process.env.PORT || 8000;
-const server = http.createServer(app);
+const http = require("http");
+const { LoadPlanetData } = require("./models/planets.model");
+require("dotenv").config();
 
-server.listen(PORT,()=>{
-     console.log(`SERVER listening on port ${PORT}`)
-});
+const { app } = require("./app");
+const PORT = process.env.PORT || 8000;
+
+const server = http.createServer(app);
+async function startServer() {
+  await LoadPlanetData();
+  server.listen(PORT, () => {
+    console.log(`SERVER listening on port ${PORT}`);
+  });
+}
+
+startServer();
