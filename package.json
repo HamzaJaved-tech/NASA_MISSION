@@ -17,5 +17,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {
+    "mongoose": "^7.5.0"
+  }
 }
