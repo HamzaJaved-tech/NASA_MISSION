@@ -1,23 +1,25 @@
-const express = require("express");
+const path = require('path');
+const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
 
-const cors = require("cors");
-const morgan = require("morgan");
-const { planetRouter } = require("./routes/planet/planets.router.js");
-const { launchesRouter } = require("./routes/launches/launches.router.js");
-var corsOptions = {
-  origin: "*",
-};
+const planetsRouter = require('./routes/planets/planets.router');
+const launchesRouter = require('./routes/launches/launches.router');
+
 const app = express();
-app.use(cors(corsOptions));
-app.use(express.json());
-app.use(morgan("dev"));
-app.use(planetRouter);
-app.use(launchesRouter);
 
-app.get("/", (req, res) => {
-  return res.send("Welcome to NASA App");
+app.use(cors({
+  origin: 'http://localhost:3000',
+}));
+app.use(morgan('combined'));
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
+app.use('/planets', planetsRouter);
+app.use('/launches', launchesRouter);
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
-module.exports = {
-  app,
-};
+module.exports = app;
